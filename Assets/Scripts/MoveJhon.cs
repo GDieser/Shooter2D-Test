@@ -1,6 +1,7 @@
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.InputSystem; // Importante: agregar esta librería
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering; // Importante: agregar esta librería
 
 public class MoveJhon : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class MoveJhon : MonoBehaviour
     [SerializeField] private float speed = 1f;
     [SerializeField] private float JumpForce;
     private bool Grounded;
+
+    [SerializeField] private GameObject bullet;
+    private float lastShoot;
 
     private Animator animator;
 
@@ -53,6 +57,15 @@ public class MoveJhon : MonoBehaviour
             Jump();
         }
 
+        if(Keyboard.current.spaceKey.isPressed && Time.time > lastShoot + 0.25f)
+        {
+            Shoot();
+            lastShoot = Time.time;
+            
+        }
+
+
+
         //Version vieja
         //if (Input.GetKeyDown(KeyCode.W))
         //    Jump();
@@ -63,6 +76,17 @@ public class MoveJhon : MonoBehaviour
     private void Jump()
     {
         rb.AddForce(Vector2.up * JumpForce);
+    }
+
+    private void Shoot()
+    {
+        Vector3 direction;
+
+        if (transform.localScale.x == 1.0f) direction = Vector2.right;
+        else direction = Vector2.left;
+
+        GameObject Bullet = Instantiate(bullet, (transform.position + direction * 0.1f), Quaternion.identity);
+        Bullet.GetComponent<BulletSricpt>().SetDirection(direction);
     }
 
     private void FixedUpdate()
