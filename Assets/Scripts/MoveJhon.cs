@@ -13,6 +13,7 @@ public class MoveJhon : MonoBehaviour
 
     [SerializeField] private GameObject bullet;
     private float lastShoot;
+    private int Health = 5;
 
     private Animator animator;
 
@@ -97,4 +98,12 @@ public class MoveJhon : MonoBehaviour
         //Version vieja 
         //Rigidbody2D.velocity = new Vector2(horizontal, Rigidbody2D.velocity.y);
     }
+
+    public void Hit()
+    {
+        Health--;
+        if (Health <= 0)
+            Destroy(gameObject);
+    }
+
 }
